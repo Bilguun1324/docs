@@ -4,12 +4,14 @@
   "advanced": "Advanced (A Folder)",
   "about": {
     "title": "About",
-    "type": "page"
+    "type": "page",
+    "href": "https://personal-portfolio-1o33.vercel.app/",
+    "newWindow": true
   },
   "contact": {
     "title": "Contact ↗",
     "type": "page",
-    "href": "https://twitter.com/shuding_",
+    "href": "https://www.linkedin.com/in/bilguun-tsolmonbaatar/",
     "newWindow": true
   }
 }
