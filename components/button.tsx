@@ -1,16 +1,57 @@
+import React from "react";
+import { motion } from "framer-motion";
+
 type ButtonProps = {
-  text?: string;
-  height?: 'small' | 'medium' | 'large';
-  width?: 'small' | 'medium' | 'large';
-}
+  children?: React.ReactNode;
+  size?: "small" | "medium" | "large";
+  color?: "black" | "red" | "green";
+};
 
 const Button = (props: ButtonProps) => {
-  const { text = 'hello', height = 'medium', width = 'medium' } = props;
+  const { children, size = 'medium', color = 'black' } = props;
+
+  const textSizes = {
+    small: "text-xs",
+    medium: "text-sm",
+    large: "text-lg",
+  }
+
+  const paddingSizes = {
+    small: "px-4 py-1",
+    medium: "px-6 py-2",
+    large: "px-8 py-3",
+  }
 
   return (
-    <div className="h-12">
-      <button className={`bg-white px-6 py-2`}>{text}</button>
-    </div>
+    <motion.button
+      className={`rounded-md relative radial-gradient-${color} ${textSizes[size]} ${paddingSizes[size]}`}
+      initial={{ "--x": "100%", scale: 1 } as any}
+      animate={{ "--x": "-100%" } as any}
+      whileTap={{ scale: 0.89 }}
+      transition={{
+        repeat: Infinity,
+        repeatType: "loop",
+        repeatDelay: 1,
+        type: "spring",
+        stiffness: 20,
+        damping: 15,
+        mass: 2,
+        scale: {
+          type: "spring",
+          stiffness: 10,
+          damping: 5,
+          mass: 0.1,
+        },
+      }}
+    >
+      <span
+        className="text-neutral-100 tracking-wide font-light 
+        h-full w-full block relative linear-mask"
+      >
+        {children}
+      </span>
+      <span className="block absolute inset-0 rounded-md p-px linear-overlay" />
+    </motion.button>
   );
 };
 
