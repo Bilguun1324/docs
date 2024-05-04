@@ -30,7 +30,8 @@ export const MagneticHover = (props: HoverProps) => {
       onMouseMove={mouseMove}
       onMouseLeave={mouseLeave}
       animate={{ x, y }}
-      transition={{ type: "spring", stiffness: 100, damping: 10 }}
+      className="p-12 w-fit h-fit"
+      transition={{ type: "linear", stiffness: 300, damping: 15, mass: 3 }}
     >
       {children}
     </motion.div>

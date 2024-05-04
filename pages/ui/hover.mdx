@@ -1,7 +1,79 @@
-import { Hover, Button } from "../../components/";
+import { Hover, Button, Spacing } from "../../components/";
+
+<div className="container">
 
 # Hover
 
-<Hover>
-    <div className="w-12 h-12 bg-slate-500"/>
-</Hover>
+Hover is a component that changes the style of its children when hovered over.
+Before we start, make sure you have the `framer-motion` and `tailwindcss` package installed in your project.
+
+```bash {3} copy
+  npm install framer-motion
+```
+
+For setting up `tailwindcss`, you can follow the instructions [here](https://tailwindcss.com/docs/installation).
+
+<Spacing>
+  <Hover>
+    <Button color="green">Button</Button>
+  </Hover>
+  <Hover>
+    <Button>Button</Button>
+  </Hover>
+  <Hover>
+    <Button color="red">Button</Button>
+  </Hover>
+</Spacing>
+
+## Codes
+
+### TypeScript
+
+```tsx filename="hover.tsx" {3} copy
+import { motion } from "framer-motion";
+import { useRef, useState } from "react";
+
+type HoverProps = {
+  children: React.ReactNode;
+};
+
+export const MagneticHover = (props: HoverProps) => {
+  const { children } = props;
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const ref = useRef(null);
+
+  const mouseMove = (e: any) => {
+    const { clientX, clientY } = e;
+    const { top, left, width, height } = ref.current.getBoundingClientRect();
+    const x = clientX - (left + width / 2);
+    const y = clientY - (top + height / 2);
+    setPosition({ x, y });
+  };
+
+  const mouseLeave = () => {
+    setPosition({ x: 0, y: 0 });
+  };
+
+  const { x, y } = position;
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={mouseMove}
+      onMouseLeave={mouseLeave}
+      animate={{ x, y }}
+      className="p-12 w-fit h-fit"
+      transition={{ type: "linear", stiffness: 300, damping: 15, mass: 3 }}
+    >
+      {children}
+    </motion.div>
+  );
+};
+```
+
+### Usage
+
+Followings are props that you can use to customize the hover component:
+- `varient`: `magnetic` | `rotate` | `scale` | `opacity` | `blur`
+
+</div>

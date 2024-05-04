@@ -4,6 +4,14 @@ import { Button, Spacing } from "../../components/";
 
 # Button
 
+For this button component, we will use the `motion` component from `framer-motion` to create a button with a radial gradient background and a linear mask effect. 
+Before we start, make sure you have the `framer-motion` and `tailwindcss` package installed in your project.
+  
+  ```bash {3} copy
+    npm install framer-motion
+  ```
+For setting up `tailwindcss`, you can follow the instructions [here](https://tailwindcss.com/docs/installation).
+
 ## Button Colors
 
 <Spacing size="small">
@@ -144,5 +152,11 @@ export default Button;
   -webkit-mask-composite: xor;
 }
 ```
+
+### Usage
+
+Followings are props that you can use to customize the button component:
+- `size`: `small`, `medium`, `large`
+- `color`: `black`, `red`, `green`
 
 </div>
