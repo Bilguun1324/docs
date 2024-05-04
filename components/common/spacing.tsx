@@ -3,7 +3,7 @@ type SpacingProps = {
   children?: React.ReactNode;
 };
 
-const Spacing = (props: SpacingProps) => {
+export const Spacing = (props: SpacingProps) => {
   const { size = "medium", children } = props;
 
   const sizes = {
@@ -20,5 +20,3 @@ const Spacing = (props: SpacingProps) => {
     </div>
   );
 };
-
-export default Spacing;

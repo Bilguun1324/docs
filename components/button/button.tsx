@@ -7,24 +7,25 @@ type ButtonProps = {
   color?: "black" | "red" | "green";
 };
 
-const Button = (props: ButtonProps) => {
-  const { children, size = 'medium', color = 'black' } = props;
+export const Button = (props: ButtonProps) => {
+  const { children, size = "medium", color = "black" } = props;
 
   const textSizes = {
-    small: "text-xs",
-    medium: "text-sm",
-    large: "text-lg",
-  }
+    small: "text-sm",
+    medium: "text-lg",
+    large: "text-xl",
+  };
 
   const paddingSizes = {
-    small: "px-4 py-1",
+    small: "px-4 py-2",
     medium: "px-6 py-2",
     large: "px-8 py-3",
-  }
+  };
 
   return (
     <motion.button
-      className={`rounded-md relative radial-gradient-${color} ${textSizes[size]} ${paddingSizes[size]}`}
+      className={`rounded-md relative 
+      radial-gradient-${color} ${textSizes[size]} ${paddingSizes[size]}`}
       initial={{ "--x": "100%", scale: 1 } as any}
       animate={{ "--x": "-100%" } as any}
       whileTap={{ scale: 0.89 }}
@@ -54,5 +55,3 @@ const Button = (props: ButtonProps) => {
     </motion.button>
   );
 };
-
-export default Button;
