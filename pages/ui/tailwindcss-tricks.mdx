@@ -1,0 +1,29 @@
+import { PeerGroupExample, Spacing } from "../../components/";
+
+<div className="container">
+
+# Tailwindcss-tricks
+
+## Hover effect in peer or parent element
+
+When you want to apply a hover effect to a child element when hovering over its parent,
+you can use the `group` class from Tailwind CSS. The `group` class is a utility class
+that allows you to apply styles to a child element when a parent element is hovered over.
+
+<Spacing>
+  <PeerGroupExample />
+</Spacing>
+
+```tsx filename="group-peer-hover.tsx" {3} copy
+<div className="flex gap-4">
+  <div className="peer p-8 bg-blue-600 group">
+    Hover me
+    <div className=" group-hover:bg-red-600">Group Example</div>
+  </div>
+  <div className="peer-hover:bg-cyan-400 flex items-center justify-center">
+    Group Example
+  </div>
+</div>
+```
+
+</div>

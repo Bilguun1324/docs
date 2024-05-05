@@ -1,0 +1,9 @@
+# Framer Motion Tricks
+
+## Variables in Framer Motion
+
+It is easy to use variables in as a value in Framer Motion. But you need to cast the object to `any` type if you are trying to use a custom property.
+
+````tsx filename="variables-as-property" {3} copy
+    initial={{ "--x": "100%", scale: 1 } as any}
+````
