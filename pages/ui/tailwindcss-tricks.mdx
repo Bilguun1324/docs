@@ -9,6 +9,8 @@ import { PeerGroupExample, Spacing } from "../../components/";
 When you want to apply a hover effect to a child element when hovering over its parent,
 you can use the `group` class from Tailwind CSS. The `group` class is a utility class
 that allows you to apply styles to a child element when a parent element is hovered over.
+You can also give specific names to the group class to apply different styles to different
+child elements which is written as `group/name`.
 
 <Spacing>
   <PeerGroupExample />
@@ -16,14 +18,30 @@ that allows you to apply styles to a child element when a parent element is hove
 
 ```tsx filename="group-peer-hover.tsx" {3} copy
 <div className="flex gap-4">
-  <div className="peer p-8 bg-blue-600 group">
+  <div className="peer p-8 bg-blue-600 group/name">
     Hover me
-    <div className=" group-hover:bg-red-600">Group Example</div>
+    <div className="group-hover:bg-red-600">Group Example 1</div>
+    <div className="group-hover/name:bg-green-600">Group Example 2</div>
   </div>
-  <div className="peer-hover:bg-cyan-400 flex items-center justify-center">
+  <div className="peer-hover:bg-cyan-400 flex items-center justify-center p-8">
     Group Example
   </div>
 </div>
 ```
+
+## Custom css properties in className
+
+You can use custom css properties in the className of an element by using [your css properties].
+You can also use the `@apply` directive to apply a set of styles to an element.
+
+```tsx filename="custom-css-properties.tsx" {3} copy
+<div className="text-[red] p-4">
+  Custom css properties
+</div>
+```
+
+<div className="text-[red] p-4">
+  Custom css properties
+</div>
 
 </div>
