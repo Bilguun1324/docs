@@ -1,6 +1,7 @@
 {
   "index": "Introduction",
   "ui": "UI Components",
+  "templates": "Templates",
   "about": {
     "title": "About",
     "type": "page",

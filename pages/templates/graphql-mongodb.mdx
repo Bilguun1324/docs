@@ -1,0 +1,460 @@
+# Template for GraphQL with MongoDB + Deployment in Vercel
+
+This is a template for a GraphQL server with MongoDB in typescript.
+GraphQL allows clients to specify exactly what data they need, which can reduce the amount of data that needs to be transferred over the network and improve performance.
+MongoDB, being a NoSQL database, can efficiently handle this flexible data fetching.
+
+This template could be forked from [GraphQL with MongoDB](https://github.com/Bilguun1324/my-docs-modules/tree/main/templates/graphql-mongo)
+
+The template would be deployed on Vercel and functions as a server for articles,
+artice:
+
+- id: ID
+- title: String
+- content: String
+  where you can create, read, update, and delete articles (CRUD operations).
+
+## Setup
+
+```bash {3} copy
+npm init
+```
+
+### Installation
+
+```bash {3} copy
+npm i @graphql-tools/load-files @graphql-tools/merge @graphql-tools/schema apollo-server dotenv graphql mongoose nodemon ts-mongoose ts-node typescript
+```
+
+### Configuration
+
+Create a `tsconfig.json` file in the root directory and add the following configuration,
+the configuration is later used by Vercel to build the project.
+
+```json {3} copy
+{
+  "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig.json to read more about this file */
+
+    /* Projects */
+    // "incremental": true,                              /* Enable incremental compilation */
+    // "composite": true,                                /* Enable constraints that allow a TypeScript project to be used with project references. */
+    // "tsBuildInfoFile": "./",                          /* Specify the folder for .tsbuildinfo incremental compilation files. */
+    // "disableSourceOfProjectReferenceRedirect": true,  /* Disable preferring source files instead of declaration files when referencing composite projects */
+    // "disableSolutionSearching": true,                 /* Opt a project out of multi-project reference checking when editing. */
+    // "disableReferencedProjectLoad": true,             /* Reduce the number of projects loaded automatically by TypeScript. */
+
+    /* Language and Environment */
+    "target": "es2016" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+    // "lib": [],                                        /* Specify a set of bundled library declaration files that describe the target runtime environment. */
+    // "jsx": "preserve",                                /* Specify what JSX code is generated. */
+    // "experimentalDecorators": true,                   /* Enable experimental support for TC39 stage 2 draft decorators. */
+    // "emitDecoratorMetadata": true,                    /* Emit design-type metadata for decorated declarations in source files. */
+    // "jsxFactory": "",                                 /* Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h' */
+    // "jsxFragmentFactory": "",                         /* Specify the JSX Fragment reference used for fragments when targeting React JSX emit e.g. 'React.Fragment' or 'Fragment'. */
+    // "jsxImportSource": "",                            /* Specify module specifier used to import the JSX factory functions when using `jsx: react-jsx*`.` */
+    // "reactNamespace": "",                             /* Specify the object invoked for `createElement`. This only applies when targeting `react` JSX emit. */
+    // "noLib": true,                                    /* Disable including any library files, including the default lib.d.ts. */
+    // "useDefineForClassFields": true,                  /* Emit ECMAScript-standard-compliant class fields. */
+
+    /* Modules */
+    "module": "commonjs" /* Specify what module code is generated. */,
+    // "rootDir": "./",                                  /* Specify the root folder within your source files. */
+    // "moduleResolution": "node",                       /* Specify how TypeScript looks up a file from a given module specifier. */
+    "baseUrl": "." /* Specify the base directory to resolve non-relative module names. */,
+    // "paths": {},                                     /* Specify a set of entries that re-map imports to additional lookup locations. */
+    // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
+    // "typeRoots": [],                                  /* Specify multiple folders that act like `./node_modules/@types`. */
+    // "types": [],                                      /* Specify type package names to be included without being referenced in a source file. */
+    // "allowUmdGlobalAccess": true,                     /* Allow accessing UMD globals from modules. */
+    // "resolveJsonModule": true,                        /* Enable importing .json files */
+    // "noResolve": true,                                /* Disallow `import`s, `require`s or `<reference>`s from expanding the number of files TypeScript should add to a project. */
+
+    /* JavaScript Support */
+    // "allowJs": true,                                  /* Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files. */
+    // "checkJs": true,                                  /* Enable error reporting in type-checked JavaScript files. */
+    // "maxNodeModuleJsDepth": 1,                        /* Specify the maximum folder depth used for checking JavaScript files from `node_modules`. Only applicable with `allowJs`. */
+
+    /* Emit */
+    // "declaration": true,                              /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
+    // "declarationMap": true,                           /* Create sourcemaps for d.ts files. */
+    // "emitDeclarationOnly": true,                      /* Only output d.ts files and not JavaScript files. */
+    // "sourceMap": true,                                /* Create source map files for emitted JavaScript files. */
+    // "outFile": "./",                                  /* Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output. */
+    // "outDir": "./",                                   /* Specify an output folder for all emitted files. */
+    // "removeComments": true,                           /* Disable emitting comments. */
+    // "noEmit": true,                                   /* Disable emitting files from a compilation. */
+    // "importHelpers": true,                            /* Allow importing helper functions from tslib once per project, instead of including them per-file. */
+    // "importsNotUsedAsValues": "remove",               /* Specify emit/checking behavior for imports that are only used for types */
+    // "downlevelIteration": true,                       /* Emit more compliant, but verbose and less performant JavaScript for iteration. */
+    // "sourceRoot": "",                                 /* Specify the root path for debuggers to find the reference source code. */
+    // "mapRoot": "",                                    /* Specify the location where debugger should locate map files instead of generated locations. */
+    // "inlineSourceMap": true,                          /* Include sourcemap files inside the emitted JavaScript. */
+    // "inlineSources": true,                            /* Include source code in the sourcemaps inside the emitted JavaScript. */
+    // "emitBOM": true,                                  /* Emit a UTF-8 Byte Order Mark (BOM) in the beginning of output files. */
+    // "newLine": "crlf",                                /* Set the newline character for emitting files. */
+    // "stripInternal": true,                            /* Disable emitting declarations that have `@internal` in their JSDoc comments. */
+    // "noEmitHelpers": true,                            /* Disable generating custom helper functions like `__extends` in compiled output. */
+    // "noEmitOnError": true,                            /* Disable emitting files if any type checking errors are reported. */
+    // "preserveConstEnums": true,                       /* Disable erasing `const enum` declarations in generated code. */
+    // "declarationDir": "./",                           /* Specify the output directory for generated declaration files. */
+    // "preserveValueImports": true,                     /* Preserve unused imported values in the JavaScript output that would otherwise be removed. */
+
+    /* Interop Constraints */
+    // "isolatedModules": true,                          /* Ensure that each file can be safely transpiled without relying on other imports. */
+    // "allowSyntheticDefaultImports": true,             /* Allow 'import x from y' when a module doesn't have a default export. */
+    "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility. */,
+    // "preserveSymlinks": true,                         /* Disable resolving symlinks to their realpath. This correlates to the same flag in node. */
+    "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
+
+    /* Type Checking */
+    "strict": true /* Enable all strict type-checking options. */,
+    // "noImplicitAny": true,                            /* Enable error reporting for expressions and declarations with an implied `any` type.. */
+    // "strictNullChecks": true,                         /* When type checking, take into account `null` and `undefined`. */
+    // "strictFunctionTypes": true,                      /* When assigning functions, check to ensure parameters and the return values are subtype-compatible. */
+    // "strictBindCallApply": true,                      /* Check that the arguments for `bind`, `call`, and `apply` methods match the original function. */
+    // "strictPropertyInitialization": true,             /* Check for class properties that are declared but not set in the constructor. */
+    // "noImplicitThis": true,                           /* Enable error reporting when `this` is given the type `any`. */
+    // "useUnknownInCatchVariables": true,               /* Type catch clause variables as 'unknown' instead of 'any'. */
+    // "alwaysStrict": true,                             /* Ensure 'use strict' is always emitted. */
+    // "noUnusedLocals": true,                           /* Enable error reporting when a local variables aren't read. */
+    // "noUnusedParameters": true,                       /* Raise an error when a function parameter isn't read */
+    // "exactOptionalPropertyTypes": true,               /* Interpret optional property types as written, rather than adding 'undefined'. */
+    // "noImplicitReturns": true,                        /* Enable error reporting for codepaths that do not explicitly return in a function. */
+    // "noFallthroughCasesInSwitch": true,               /* Enable error reporting for fallthrough cases in switch statements. */
+    // "noUncheckedIndexedAccess": true,                 /* Include 'undefined' in index signature results */
+    // "noImplicitOverride": true,                       /* Ensure overriding members in derived classes are marked with an override modifier. */
+    // "noPropertyAccessFromIndexSignature": true,       /* Enforces using indexed accessors for keys declared using an indexed type */
+    // "allowUnusedLabels": true,                        /* Disable error reporting for unused labels. */
+    // "allowUnreachableCode": true,                     /* Disable error reporting for unreachable code. */
+
+    /* Completeness */
+    // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */
+  },
+
+  "version": 2,
+  "builds": [
+    {
+      "src": "public/dist/index.ts",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["public/dist/**"]
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "public/dist/index.ts"
+    }
+  ]
+}
+```
+
+### Environment Variables
+
+Create a `.env` file in the root directory and add the following configuration,
+
+```env {3} copy
+URI=<your-mongo-url>
+```
+
+You can get the URI from MongoDB Atlas, by following the steps below,
+
+1. Create an account on [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+2. Create a new project
+3. Create a new cluster (In this template, we are using the free tier)
+4. Go to Security > Network Access > Add IP Address
+   and add the allow access from anywhere option or type `0.0.0.0/0` in the access list entry,
+   remember to change this to a more secure option in production.
+5. Go to Deployment > Connect > Connect your application in there you will find the URI that will look like this,
+
+```plaintext {3} copy
+`mongodb+srv://<username>:<password>@<cluster-url>/<database-name>?retryWrites=true&w=majority`
+```
+
+replace `<password>` with your own values (`<username>`, `<cluster-url>`, `<database-name>` should be already filled in)
+
+<b> You can set the password in Security > Database Access </b>
+
+## Implementing server
+
+### Server
+
+Create a `index.ts` file in the root directory and add the following code, it will be the main file for the server.
+
+```typescript {3} copy
+import { ApolloServer } from "apollo-server";
+import resolvers from "./resolvers";
+
+import mongoose from "mongoose";
+import "dotenv/config";
+import { typeDefs } from "./types";
+
+// Create a new ApolloServer instance, pass in the schema data
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
+
+// Getting the URI from the .env file
+const uri: any = process.env.URI;
+
+try {
+  // Connect to the MongoDB database
+  mongoose.connect(uri);
+  const connection = mongoose.connection;
+
+  connection.once("open", () => {
+    console.log("MongoDB database connection established successfully");
+  });
+} catch (error) {
+  console.log(error);
+}
+
+// Start the server
+server.listen().then(({ url }) => {
+  console.log(`🚀  Server ready at ${url}`);
+});
+```
+
+### TypeDefs
+
+Create a `types` folder and add a `index.ts` file in it, add the following code,
+
+```typescript {3} copy
+import path from "path";
+
+import { mergeTypeDefs } from "@graphql-tools/merge";
+import { loadFilesSync } from "@graphql-tools/load-files";
+
+const typesArray = loadFilesSync(path.join(__dirname, "."), {
+  extensions: ["graphql"],
+});
+
+export const typeDefs = mergeTypeDefs(typesArray);
+```
+
+It will load all the `.graphql` files in the `types` folder. So every type you create will be loaded automatically.
+
+Create a `article.graphql` file in the `types` folder and add the following code,
+
+```graphql {3} copy
+type Article {
+  id: ID
+  title: String
+  content: String
+}
+
+type Query {
+  getArticles: [Article]
+  getArticle(id: ID!): Article
+}
+
+type Mutation {
+  addArticle(title: String!, content: String): Article
+  updateArticle(id: ID!, title: String!, content: String): Article
+  deleteArticle(id: ID!): Article
+}
+```
+
+The `Article` type has three fields:
+
+- `id`
+- `title`
+- `content`
+
+The `Query` type has two fields:
+
+- `getArticles` returns an array of articles
+- `getArticle` returns a single article based on the `id` provided
+
+The `Mutation` type has three fields:
+
+- `addArticle`
+- `updateArticle`
+- `deleteArticle` which all return the changed article.
+
+### Schemas
+
+Create a `schemas` folder and add `index.ts` and `article.ts` files in it.
+
+Add the following code to the `article.ts` file to create a model for the article,
+
+```typescript {3} copy
+import mongoose, { Schema } from "mongoose";
+
+// Define the schema for the Article model
+const ArticleSchema = new Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  content: {
+    type: String,
+  },
+});
+
+const ArticleModel = mongoose.model("Article", ArticleSchema);
+
+export { ArticleModel };
+```
+
+Add the following code to the `index.ts` file to export all the schemas,
+
+```typescript {3} copy
+export * from "./article";
+```
+
+### Resolvers
+
+Create a `resolvers` folder and add `index.ts` and `article.ts` files in it.
+
+Add the following code to the `article.ts` file to create resolvers for the article,
+
+```typescript {3} copy
+import { ArticleModel } from "../schemas";
+
+const addArticle = async (_: any, params: any) => {
+  const Article = new ArticleModel(params);
+
+  try {
+    // Save the new Article
+    await Article.save();
+    return Article;
+  } catch (err) {
+    return err;
+  }
+};
+
+const updateArticle = async (_: any, params: any) => {
+  const Article = new ArticleModel(params);
+
+  try {
+    // Update given Article
+    await Article.updateOne({ _id: params.id }, params);
+    return Article;
+  } catch (err) {
+    return err;
+  }
+};
+
+const deleteArticle = async (_: any, params: any) => {
+  try {
+    // Delete given Article
+    await ArticleModel.deleteOne({ _id: params.id });
+    return params;
+  } catch (err) {
+    return err;
+  }
+};
+
+const getArticle = async (_: any, params: any) => {
+  try {
+    // Find the Article by ID
+    const Article = await ArticleModel.findOne(params);
+    return Article;
+  } catch (err) {
+    return err;
+  }
+};
+
+const getArticles = async (_: any, params: any) => {
+  try {
+    // Find all Articles
+    const Article = await ArticleModel.find(params);
+    return Article;
+  } catch (err) {
+    return err;
+  }
+};
+
+export { addArticle, getArticle, getArticles, updateArticle, deleteArticle };
+```
+
+Add the following code to the `index.ts` file to export all the resolvers,
+
+```typescript {3} copy
+import {
+  addArticle,
+  getArticle,
+  getArticles,
+  updateArticle,
+  deleteArticle,
+} from "./articleResolver";
+
+export default {
+  Query: {
+    getArticle,
+    getArticles,
+  },
+  Mutation: {
+    addArticle,
+    updateArticle,
+    deleteArticle,
+  },
+};
+```
+
+## Running the server
+
+Add the following script to the `package.json` > `scripts` section,
+it will start the server using `nodemon` which will restart the server whenever a file is changed.
+
+```json {3} copy
+"start": "nodemon index.ts"
+```
+
+after this scripts section should be looking like following:
+
+```plaintext
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.ts"
+  },
+```
+
+After adding the script, you can start the server by running the following command,
+
+```bash {3} copy
+npm start
+```
+
+The server will start at `http://localhost:4000/` and you can access the GraphQL playground to test the queries and mutations.
+
+## Deploying to Vercel
+
+Create a `vercel.json` and add following code, it will be used by Vercel to build the project.
+
+```json {3} copy
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "./index.ts",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["types/**"]
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
+  ]
+}
+```
+
+After creating the `vercel.json` file, you are now done with coding and configuration. 
+After pushing your code to GitHub, you can deploy the project to Vercel by following the steps below,
+- Go to [Vercel](https://vercel.com/)
+- Click on the `Import Project` button
+- Select the repository where you pushed the code
+- Select the correct root directory
+- Add the environment variable `URI` in `Environment Variables` section
+- Click on the `Deploy` button
+
+Now your server is deployed on Vercel, remember that you cannot use the playground in production, so you need to use a client like `Apollo Client` to interact with the server.
